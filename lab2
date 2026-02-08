@@ -1,0 +1,87 @@
+# CS 351
+# Assignment: Lab 2
+# Group Names: Amanda Chaaban and Bellarose
+
+import re
+
+def task1_pattern_matching():
+    """Task 1: Pattern matching for strings"""
+    patterns = [ 
+        (r'^\d+$', 'a. An integer'),
+        (r'^\d+\.\d*+', 'b. A float consists of 1 or more digits before and after decimal point'),
+        (r'^\d+\.\d{2}$', 'c. A float with exactly 2 digits after the decimal point'),
+        (r'^\d+\.\d[f]$', 'd. A float end with letter f (4.321f)'),
+        (r'^[A-Z][a-z]+\d+', 'e. Capital letters, followed by small case letters, followed by digits'),
+        (r'^\d{3}[a-zA-Z]{2,}', 'f. Exactly 3 digits, followed by at least 2 letters')
+    ]
+    
+    # Test strings
+    test_strings = [
+        "22.11", "23", "66.7f", "123abcde", "Case44", 
+        "Happy", "78", "66.7", "yes123", "Book111"
+    ]
+    
+    print("\nTASK 1: Pattern Matching for Strings")
+    
+    # Test each string
+    for i, test_str in enumerate(test_strings, 1):
+        print(f"\nTesting string {i}: '{test_str}'")
+        matches = []
+        
+        # Test against all patterns
+        for pattern, description in patterns:
+            if re.match(pattern, test_str):
+                matches.append(description)
+        
+        # Print results
+        if matches:
+            for match in matches:
+                print(f"{test_str} matches the pattern: {match}")
+        else:
+            print(f"No pattern matched")
+
+def task2_remove_integer():
+    """Task 2: Remove integer from beginning of string"""
+    
+    def remove_beginning_integer(text):
+        """Find and remove integer at beginning of string"""
+        pattern = r'^(\d+)\s*(.*)$'
+        match = re.match(pattern, text)
+        
+        if match:
+            integer = match.group(1)
+            remaining = match.group(2)
+            start_idx = 0
+            end_idx = len(integer)
+            return integer, start_idx, end_idx, remaining
+        return None, None, None, text
+    
+    # Test cases
+    test_cases = [
+        "22   street",
+        "90years",
+        "123  abc def",
+        "no_number_here",
+        "4567testing123",
+        "  789spaces_at_start",
+        "00123test",
+        "5.5not_integer"  # This won't match as integer
+    ]
+    
+    print("\nTASK 2: Remove Integer from Beginning of String")
+    
+    for test_str in test_cases:
+        print(f"\nTesting string: '{test_str}'")
+        integer, start, end, remaining = remove_beginning_integer(test_str)
+        
+        if integer:
+            print(f"  Found integer {integer} at the beginning of this string,")
+            print(f"  starting at index {start} ending at index {end}.")
+            print(f"  The rest of the string is: '{remaining}'")
+        else:
+            print(f"  No integer found at the beginning.")
+
+# Main execution
+if __name__ == "__main__":
+    task1_pattern_matching()
+    task2_remove_integer()
